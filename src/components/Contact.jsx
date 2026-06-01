@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-
+import emailjs from "@emailjs/browser";
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -15,19 +15,34 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = (e) => {
+  e.preventDefault();
 
-    console.log(formData);
+  emailjs
+    .send(
+      "service_s7z5t5u",
+      "template_quzc4cr",
+      {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+      },
+      "Ee_1hoyawZaOqOJnR"
+    )
+    .then(() => {
+      alert("Message sent successfully!");
 
-    alert("Message sent successfully!");
-
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+    })
+    .catch((error) => {
+      console.error("Email Error:", error);
+      alert("Failed to send message");
     });
-  };
+};
 
   return (
     <section
